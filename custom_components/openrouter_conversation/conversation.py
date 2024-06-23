@@ -4,6 +4,16 @@ import json
 from typing import Literal
 
 import openai
+import voluptuous as vol
+from homeassistant.components import assist_pipeline, conversation
+from homeassistant.components.conversation import trace
+from homeassistant.const import CONF_LLM_HASS_API, MATCH_ALL
+from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError, TemplateError
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import intent, llm, template
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.util import ulid
 from openai._types import NOT_GIVEN
 from openai.types.chat import (
     ChatCompletionAssistantMessageParam,
@@ -17,20 +27,11 @@ from openai.types.chat import (
 )
 from openai.types.chat.chat_completion_message_tool_call_param import Function
 from openai.types.shared_params import FunctionDefinition
-import voluptuous as vol
 from voluptuous_openapi import convert
-
-from homeassistant.components import assist_pipeline, conversation
-from homeassistant.components.conversation import trace
-from homeassistant.const import CONF_LLM_HASS_API, MATCH_ALL
-from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError, TemplateError
-from homeassistant.helpers import device_registry as dr, intent, llm, template
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.util import ulid
 
 from . import OpenAIConfigEntry
 from .const import (
+    BASE_URL,
     CONF_CHAT_MODEL,
     CONF_MAX_TOKENS,
     CONF_PROMPT,
@@ -76,6 +77,7 @@ class OpenAIConversationEntity(
 
     def __init__(self, entry: OpenAIConfigEntry) -> None:
         """Initialize the agent."""
+        self.base_url = BASE_URL
         self.entry = entry
         self.history: dict[str, list[ChatCompletionMessageParam]] = {}
         self._attr_unique_id = entry.entry_id

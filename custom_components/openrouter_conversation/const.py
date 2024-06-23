@@ -15,3 +15,5 @@ CONF_TOP_P = "top_p"
 RECOMMENDED_TOP_P = 1.0
 CONF_TEMPERATURE = "temperature"
 RECOMMENDED_TEMPERATURE = 1.0
+
+BASE_URL = "https://openrouter.ai/api/v1"

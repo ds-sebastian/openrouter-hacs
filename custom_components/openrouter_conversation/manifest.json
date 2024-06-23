@@ -1,11 +1,11 @@
 {
-  "domain": "openai_conversation",
-  "name": "OpenAI Conversation",
+  "domain": "openrouter_conversation",
+  "name": "OpenRouter Conversation",
   "after_dependencies": ["assist_pipeline", "intent"],
-  "codeowners": ["@balloob"],
+  "codeowners": ["@ds-sebastian"],
   "config_flow": true,
   "dependencies": ["conversation"],
-  "documentation": "https://www.home-assistant.io/integrations/openai_conversation",
+  "documentation": "",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "requirements": ["openai==1.3.8", "voluptuous-openapi==0.0.4"]

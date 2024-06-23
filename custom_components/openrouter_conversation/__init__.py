@@ -6,7 +6,6 @@ from typing import Literal, cast
 
 import openai
 import voluptuous as vol
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY, Platform
 from homeassistant.core import (
@@ -22,7 +21,11 @@ from homeassistant.exceptions import (
 )
 from homeassistant.helpers import (
     config_validation as cv,
+)
+from homeassistant.helpers import (
     issue_registry as ir,
+)
+from homeassistant.helpers import (
     selector,
 )
 from homeassistant.helpers.typing import ConfigType
@@ -115,7 +118,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: OpenAIConfigEntry) -> bool:
     """Set up OpenAI Conversation from a config entry."""
-    client = openai.AsyncOpenAI(api_key=entry.data[CONF_API_KEY])
+    client = openai.AsyncOpenAI(api_key=entry.data[CONF_API_KEY], base_url=BASE_URL)
     try:
         await hass.async_add_executor_job(client.with_options(timeout=10.0).models.list)
     except openai.AuthenticationError as err:

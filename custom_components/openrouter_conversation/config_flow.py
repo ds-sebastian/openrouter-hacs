@@ -8,7 +8,6 @@ from typing import Any
 
 import openai
 import voluptuous as vol
-
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
@@ -57,11 +56,12 @@ RECOMMENDED_OPTIONS = {
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
-    """Validate the user input allows us to connect.
+    """
+    Validate the user input allows us to connect.
 
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
-    client = openai.AsyncOpenAI(api_key=data[CONF_API_KEY])
+    client = openai.AsyncOpenAI(api_key=data[CONF_API_KEY], base_url=BASE_URL)
     await hass.async_add_executor_job(client.with_options(timeout=10.0).models.list)
 
 
